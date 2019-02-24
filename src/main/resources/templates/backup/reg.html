@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>注册</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/demo.css"/>
+    <link rel="stylesheet" href="css/signin.css"/>
+    <link rel="stylesheet" href="css/templatemo-style.css">
+    <script type="text/javascript" src="js/modernizr.custom.86080.js"></script>
+    <script type="text/javascript" src="js/jquery-3.2.1.slim.min.js"></script>
+    <script type="text/javascript" src="js/script.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <style>    body {
+        font-family: 'microsoft yahei', Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }</style>
+</head>
+<body>
+<div id="particles-js"></div>
+<ul class="cb-slideshow">
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+</ul>
+<div class="container-fluid">
+    <div class="row cb-slideshow-text-container ">
+        <div class="tm-content col-xl-6 col-sm-8 col-xs-8 ml-auto section">
+            <header class="mb-5"><h1>欢迎使用</h1></header>
+            <P class="mb-5">考试练习系统</P>
+            <form th:action="@{/login}" method="post" class="subscribe-form">
+                <div class="row form-section">
+                    <div class="col-md-7 col-sm-7 col-xs-7">
+                        <input name="username" type="text" class="form-control" placeholder="账号" required/>
+                        <input type="password" name="password" class="form-control" placeholder="密码" required>
+                        <input type="checkbox" value="remember-me" style="padding-left: 1px"/>记住密码
+                        <p style="color: #ffa869" th:text="${msg}" th:if="${not #strings.isEmpty(msg)}"></p>
+                    </div>
+                    <div class="col-md-5 col-sm-5 col-xs-5">
+                        <a href="#" onclick="showReg()">
+                            <button type="button" class="tm-btn-subscribe" style="background-color: #3b3b3b">&nbsp;&nbsp;注册&nbsp;&nbsp;</button>
+                        </a>
+                        <br/>
+                        <button type="submit" class="tm-btn-subscribe" style="background-color: #2b2b2b">&nbsp;&nbsp;登录&nbsp;&nbsp;</button>
+                    </div>
+                </div>
+            </form>
+
+            <div class="tm-social-icons-container text-xs-center">
+                <a href="#" onclick="location.reload()" class="tm-social-link"><i class="fa fa-spinner fa-spin"></i></a>
+                <a href="http://www.weibo.com" target="_blank" class="tm-social-link"><i class="fa fa-weibo"></i></a>
+                <a href="http://www.linkedin.com" target="_blank" class="tm-social-link"><i class="fa fa-linkedin"></i></a>
+                <a href="http://www.dlmu.edu.cn" target="_blank" class="tm-social-link"><i
+                        class="fa fa-mortar-board"></i></a>
+            </div>
+
+        </div>
+    </div>
+    <!-- 按钮触发模态框 -->
+    <button class="btn btn-primary btn-lg" id="reg" data-toggle="modal" data-target="#myModal" hidden="true">
+    </button>
+    <!-- 注册窗口 -->
+    <!-- 模态框 -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">新增</h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label for="txt_departmentname">部门名称</label>
+                        <input type="text" name="txt_departmentname" class="form-control" id="txt_departmentname"
+                               placeholder="部门名称">
+                    </div>
+                    <div class="form-group">
+                        <label for="txt_parentdepartment">上级部门</label>
+                        <input type="text" name="txt_parentdepartment" class="form-control" id="txt_parentdepartment"
+                               placeholder="上级部门">
+                    </div>
+                    <div class="form-group">
+                        <label for="txt_departmentlevel">部门级别</label>
+                        <input type="text" name="txt_departmentlevel" class="form-control" id="txt_departmentlevel"
+                               placeholder="部门级别">
+                    </div>
+                    <div class="form-group">
+                        <label for="txt_statu">描述</label>
+                        <input type="text" name="txt_statu" class="form-control" id="txt_statu" placeholder="状态">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><span
+                            class="glyphicon glyphicon-remove" aria-hidden="true"></span>关闭
+                    </button>
+                    <button type="button" id="btn_submit" class="btn btn-primary" data-dismiss="modal"><span
+                            class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>保存
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer-link">
+        <p>Haiyan Design</p>
+    </div>
+</div>
+</body>
+</html>

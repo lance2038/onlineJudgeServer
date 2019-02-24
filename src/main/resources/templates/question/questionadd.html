@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>试题录入</title>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/css/dashboard.css}" rel="stylesheet">
+    <style type="text/css">
+        /* Chart.js */
+        @-webkit-keyframes chartjs-render-animation {
+            from {
+                opacity: 0.99
+            }
+            to {
+                opacity: 1
+            }
+        }
+
+        @keyframes chartjs-render-animation {
+            from {
+                opacity: 0.99
+            }
+            to {
+                opacity: 1
+            }
+        }
+
+        .chartjs-render-monitor {
+            -webkit-animation: chartjs-render-animation 0.001s;
+            animation: chartjs-render-animation 0.001s;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="commons/bar::topbar"></div>
+<div class="container-fluid">
+    <div class="row">
+        <div th:replace="commons/bar::#sidebar(activeUri='tempQuestions')"></div>
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+            <form th:action="@{/questions/tempQuestion}" method="post">
+                <input type="hidden" name="_method" value="put" th:if="${question!=null}"/>
+                <input type="hidden" name="titleid" th:if="${question!=null}" th:value="${question.titleid}">
+                <div class="form-group">
+                    <label>试题类型</label>
+                    <select class="form-control" name="classid">
+                        <option th:selected="${question!=null}?${dic.dic_value == question.classid}"
+                                th:value="${dic.dic_value}"
+                                th:each="dic:${sysdics}" th:text="${dic.dic_name}">1
+                        </option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>问题</label>
+                    <input name="question" type="text" class="form-control" placeholder="问题"
+                           th:value="${question!=null}?${question.question}">
+                </div>
+                <div class="form-group">
+                    <label>A选项</label>
+                    <input name="opt1" type="text" class="form-control" placeholder="A选项"
+                           th:value="${question!=null}?${question.opt1}">
+                </div>
+                <div class="form-group">
+                    <label>B选项</label>
+                    <input name="opt2" type="text" class="form-control" placeholder="B选项"
+                           th:value="${question!=null}?${question.opt2}">
+                </div>
+                <div class="form-group">
+                    <label>C选项</label>
+                    <input name="opt3" type="text" class="form-control" placeholder="C选项"
+                           th:value="${question!=null}?${question.opt3}">
+                </div>
+                <div class="form-group">
+                    <label>D选项</label>
+                    <input name="opt4" type="text" class="form-control" placeholder="D选项"
+                           th:value="${question!=null}?${question.opt4}">
+                </div>
+                <div class="form-group">
+                    <label>答案</label>
+                    <select class="form-control" name="answer">
+                        <option value="1" th:selected="${question!=null}?${question.answer=='1'}">A</option>
+                        <option value="2" th:selected="${question!=null}?${question.answer=='2'}">B</option>
+                        <option value="3" th:selected="${question!=null}?${question.answer=='3'}">C</option>
+                        <option value="4" th:selected="${question!=null}?${question.answer=='4'}">D</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>解释</label>
+                    <input name="explainmsg" type="text" class="form-control" placeholder="解释"
+                           th:value="${question!=null}?${question.explainmsg}">
+                </div>
+
+                <button type="submit" class="btn btn-primary" th:text="${question!=null}?'修改':'添加'">添加</button>
+            </form>
+        </main>
+    </div>
+</div>
+<script type="text/javascript" th:src="@{/js/jquery-3.2.1.slim.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/popper.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/feather.min.js}"></script>
+<script>
+    feather.replace()
+</script>
+</body>
+</html>

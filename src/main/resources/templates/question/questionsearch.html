@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>试题查询</title>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/css/dashboard.css}" rel="stylesheet">
+    <link th:href="@{/css/sweetalert.css}" rel="stylesheet">
+    <link th:href="@{/css/bootstrap-table.min.css}" rel="stylesheet">
+    <script type="text/javascript" th:src="@{/js/sweetalert.min.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/jquery/3.3.1/jquery.js}"></script>
+    <script type="text/javascript" th:src="@{/js/ajaxUtil.js}"></script>
+    <script type="text/javascript">
+    </script>
+</head>
+<body>
+<div th:replace="commons/bar::topbar"></div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div th:replace="commons/bar::#sidebar(activeUri='searchQuestions')"></div>
+
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+            <form id="merchant_query_form">
+                <div class="row">
+                    <div class="col-md-10"><input type="text" id="question" name="question" class="form-control"
+                                                  placeholder="输入问题..." required=""
+                                                  autofocus=""></div>
+                    <div class="col-md-2">
+                        <button class="btn btn-default" style="width: 100%" type="button"
+                                onclick="submitFormForTable(this);">提交
+                        </button>
+                    </div>
+                </div>
+                <table id="list_table" class="table-responsive class"></table>
+            </form>
+        </main>
+    </div>
+</div>
+<script type="text/javascript" th:src="@{/js/popper.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap-table.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap-table-zh-CN.min.js}"></script>
+<!-- Icons -->
+<script type="text/javascript" th:src="@{/js/feather.min.js}"></script>
+<script>
+    function submitFormForTable(obj) {
+        loadData("#merchant_query_form", "#list_table");
+    }
+
+    function loadData(formId, tableId) {
+        $(tableId).bootstrapTable('destroy'); // 清除缓存表格数据
+        $(tableId).bootstrapTable({
+            striped: true, // 隔行变色
+            url: "[[@{/questions/search}]]",
+            method: "post",
+            dataType: "json",
+            pagination: true, //分页
+            sidePagination: "server", //服务端处理分页
+            pageNumber: 1, // 默认显示第几页
+            pageSize: 10, // 每页显示条数
+            pageList: [10, 20, 30, 40, 50],//分页步进值
+            sortable: true,
+
+            showColumns: true,//是否显示所有的列（选择显示的列）
+            cache: true, // 默认true 设置为 false 禁用 AJAX 数据缓存
+            contentType: "application/x-www-form-urlencoded", // 参数提交类型，默认以application/json提交
+            queryParams: function (params) {
+                $(formId).find("input[name]").each(function () {
+                    params[$(this).attr("name")] = $(this).val();
+                });
+                return params;
+            }, // 请求参数
+            responseHandler: function (res) { // res为从服务器请求到的数据
+                return res;
+            },
+            columns: [ // 渲染列
+                {
+                    title: '序号',
+                    field: '',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var pageSize = $('#list_table').bootstrapTable('getOptions').pageSize;     //通过table的#id 得到每页多少条
+                        var pageNumber = $('#list_table').bootstrapTable('getOptions').pageNumber; //通过table的#id 得到当前第几页
+                        return pageSize * (pageNumber - 1) + index + 1;    // 返回每条的序号： 每页条数 *（当前页 - 1 ）+ 序号
+                    }
+                },
+                {
+                    title: '问题',
+                    field: 'question',
+                    align: 'center',
+                    valign: 'middle',
+                },
+                {
+                    title: 'A选项',
+                    field: 'opt1',
+                    align: 'center'
+                },
+                {
+                    title: 'B选项',
+                    field: 'opt2',
+                    align: 'center'
+                },
+                {
+                    title: 'C选项',
+                    field: 'opt3',
+                    align: 'center'
+                },
+                {
+                    title: 'D选项',
+                    field: 'opt4',
+                    align: 'center'
+                },
+                {
+                    title: '答案',
+                    field: 'answer',
+                    align: 'center',
+                },
+                {
+                    title: '解释',
+                    field: 'explainmsg',
+                    align: 'center',
+                }
+            ]
+        });
+    }
+
+    feather.replace()
+</script>
+</body>
+</html>

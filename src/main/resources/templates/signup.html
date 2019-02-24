@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>注册</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700,300' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/animate.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/sweetalert.css}">
+    <script type="text/javascript" th:src="@{/js/jquery-3.2.1.js}"></script>
+    <!--<script type="text/javascript" th:src="@{/js/jquery-3.2.1.slim.min.js}"></script>-->
+    <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/jquery.placeholder.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/jquery.waypoints.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/main.js}"></script>
+    <script type="text/javascript" th:src="@{/js/modernizr-2.6.2.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/sweetalert.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/ajaxUtil.js}"></script>
+    <script type="text/javascript">
+        var ckUserflag = false;
+
+        function checkRegForm() {
+            var pwd1 = $("#usr_passwd").val();
+            var pwd2 = $("#re-usr_passwd").val();
+            if (pwd1 != pwd2) {
+                sweetAlert("两次输入的密码不一致！", null, "error");
+                $("#re-usr_passwd").click(function () {
+                    $("input").focus();
+                });
+                return false;
+            } else {
+                if (ckUserflag == false) {
+                    sweetAlert("账号已存在", null, "error");
+                    return false;
+                }
+                return true;
+            }
+        }
+
+        function checkUserExists() {
+            var usr_id = $("#usr_id").val();
+            var url = '[[@{/checkuser}]]';
+            var params = {usr_id: usr_id};
+            ajaxJsonRequest(url, params, function fal(data) {
+                if (data.success == true) {
+                    ckUserflag = false;
+                    sweetAlert("账号已存在", null, "error");
+                } else {
+                    ckUserflag = true;
+                }
+            }, null, true)
+        }
+    </script>
+</head>
+<body class="style-2">
+<script src="js/canvas-nest.js" count="500" zindex="-2" opacity="2" color="50,200,200" type="text/javascript"></script>
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <!-- Start Sign In Form -->
+            <form th:action="@{/register}" class="fh5co-form animate-box" data-animate-effect="fadeInLeft"
+                  onsubmit="return checkRegForm()" method="post">
+                <div class="form-group">
+                    <div class="alert alert-success" role="alert">注册信息</div>
+                </div>
+                <div class="form-group">
+                    <label for="usr_name" class="sr-only">姓名</label>
+                    <input type="text" class="form-control" id="usr_name" name="usr_name" placeholder="姓名"
+                           th:value="${usr_name}" autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <label for="usr_id" class="sr-only">账号</label>
+                    <input type="text" class="form-control" id="usr_id" name="usr_id" placeholder="账号"
+                           th:value="${usr_id}" onchange="checkUserExists()" autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <label for="usr_mail" class="sr-only">邮箱</label>
+                    <input type="email" class="form-control" id="usr_mail" name="usr_mail" placeholder="邮箱"
+                           th:value="${usr_mail}" autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <label for="usr_passwd" class="sr-only">密码</label>
+                    <input type="password" class="form-control" id="usr_passwd" name="usr_passwd" placeholder="密码"
+                           autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <label for="re-usr_passwd" class="sr-only">再次输入密码</label>
+                    <input type="password" class="form-control" id="re-usr_passwd" placeholder="再次输入密码"
+                           autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="注册" class="btn btn-primary">
+                    <div id="toLogon"><a th:href="@{/login}"
+                                         th:if="${regFlag=='1'}">注册成功,点击跳转到登录界面</a></div>
+                </div>
+            </form>
+            <!-- END Sign In Form -->
+        </div>
+    </div>
+</div>
+</body>
+</html>
+

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>upload</title>
+    <link href="asserts/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/4.0.0/css/bootstrap.css}" rel="stylesheet">
+    <link href="asserts/css/dashboard.css" th:href="@{/css/dashboard.css}" rel="stylesheet">
+    <link type="text/css" media="all" rel="stylesheet" th:href="@{/css/fileinput.min.css}"/>
+    <link th:href="@{/css/sweetalert.css}" rel="stylesheet">
+    <script type="text/javascript" th:src="@{/js/sweetalert.min.js}"></script>
+</head>
+<body>
+<div th:replace="commons/bar::topbar"></div>
+<div class="container-fluid">
+    <div class="row">
+        <div th:replace="commons/bar::#sidebar(activeUri='uploadquestions')"></div>
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+            <h2><a class="btn btn-sm btn-success" href="#" th:href="@{/questions/downquestiontemplate}">下载模板文件</a></h2>
+            <select id='classid' class="form-control selectpicker" data-live-search="true"/>
+            <form id="importFile" name="importFile" class="form-horizontal" method="post"
+                  enctype="multipart/form-data">
+                <label class="control-label">请选择要导入的Excel文件：</label>
+                <input id="xls_file" name="xls_file" class="file-loading" type="file" multiple accept=".xls,.xlsx"><br>
+            </form>
+        </main>
+    </div>
+</div>
+<script type="text/javascript" th:src="@{/webjars/jquery/3.3.1/jquery.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/popper.js/1.11.1/dist/popper.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/bootstrap/4.0.0/js/bootstrap.js}"></script>
+<script type="text/javascript" th:src="@{/js/feather.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/fileinput.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/zh.js}"></script>
+<script>
+    $.ajax({
+        url: "[[@{/questions/getQuestionType}]]",
+        dataType: "json",
+        success: function (data) {
+            var optArr = [];
+            for (var i = 0; i < data.length; i++) {
+                $('.selectpicker').append("<option value=" + data[i].value + ">" + data[i].text + "</option>");
+            }
+        }
+    });
+    initUpload("xls_file", "[[@{/questions/fileuploaded}]]");
+
+    function initUpload(ctrlName, uploadUrl) {
+        var control = $('#' + ctrlName);
+        control.fileinput({
+            language: 'zh', //设置语言
+            uploadUrl: uploadUrl, //上传的地址
+            uploadAsync: true, //默认异步上传
+            showCaption: true,//是否显示标题
+            showUpload: true, //是否显示上传按钮
+            browseClass: "btn btn-primary", //按钮样式
+            allowedFileExtensions: ["xls", "xlsx"], //接收的文件后缀
+            maxFileCount: 1,//最大上传文件数限制
+            previewFileIcon: '<i class="glyphicon glyphicon-file"></i>',
+            showPreview: true, //是否显示预览
+            previewFileIconSettings: {
+                'docx': '<i ass="fa fa-file-word-o text-primary"></i>',
+                'xlsx': '<i class="fa fa-file-excel-o text-success"></i>',
+                'xls': '<i class="fa fa-file-excel-o text-success"></i>',
+                'pptx': '<i class="fa fa-file-powerpoint-o text-danger"></i>',
+                'jpg': '<i class="fa fa-file-photo-o text-warning"></i>',
+                'pdf': '<i class="fa fa-file-archive-o text-muted"></i>',
+                'zip': '<i class="fa fa-file-archive-o text-muted"></i>',
+            },
+            uploadExtraData: function () {
+                var type = $("#classid").val();
+                return {"type": type};
+            }
+        });
+    }
+
+    $("#xls_file").on("fileuploaded", function (event, data, previewId, index) {
+        console.log(data);
+        if (data.response.success == true) {
+            sweetAlert(data.files[index].name + "上传成功!", null, "success");
+            //关闭
+            $(".close").click();
+        }
+        else {
+            sweetAlert(data.files[index].name + "上传失败!" + data.response.message, null, "error");
+            //重置
+            $("#xls_file").fileinput("clear");
+            $("#xls_file").fileinput("reset");
+            $('#xls_file').fileinput('refresh');
+            $('#xls_file').fileinput('enable');
+        }
+    });
+</script>
+<script>
+    feather.replace()
+</script>
+</body>
+</html>
