@@ -8,6 +8,7 @@ import com.product.judge.common.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -50,7 +51,7 @@ public class LoginController
         sysuser.setUsr_id(username);
         sysuser.setUsr_passwd(StringUtil.getMD5Str(password));
         sysuser = loginService.getUsrInfoByIdPw(sysuser);
-        if (!StringUtil.isNullString(sysuser.getUsr_code()))
+        if (!ObjectUtils.isEmpty(sysuser) && !StringUtil.isNullString(sysuser.getUsr_code()))
         {
             //登陆成功，防止表单重复提交，可以重定向到主页
             session.setAttribute(SessionUtil.SHOW_ATTR, sysuser.getUsr_name());
