@@ -40,7 +40,7 @@
 
         <spring.boot.version>1.5.8.RELEASE</spring.boot.version>
         <alibaba.druid.version>1.1.4</alibaba.druid.version>
-        <alibaba.fastjson.version>1.2.33</alibaba.fastjson.version>
+        <alibaba.fastjson.version>1.2.83</alibaba.fastjson.version>
 
         <apache.http.version>4.5.3</apache.http.version>
         <aspectj.weaver.version>1.8.10</aspectj.weaver.version>
